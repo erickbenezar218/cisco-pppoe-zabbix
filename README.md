@@ -42,7 +42,7 @@ Não há um deploy web para esta aplicação. Os scripts são utilizados diretam
 
 1. **Ajuste no script `discovery_interfaces_pppoe`:** Corrigidos problemas relacionados a MIBs e adição de lógica para garantir a descoberta correta das interfaces PPPoE.
  
-scripts originais foram desenvolvidos por Fernando Almondes da Bee Solutions. Para mais informações e suporte, você pode entrar em contato com ele através do [Telegram](https://t.me/beesolutions).
+**scripts originais foram desenvolvidos por Fernando Almondes da Bee Solutions**. Para mais informações e suporte, você pode entrar em contato com ele através do [Telegram](https://t.me/beesolutions).
 ## Como Rodar o monitoramento :arrow_forward:
 
 No terminal, clone o projeto:
@@ -69,3 +69,10 @@ Configure as macros no Zabbix:
 {$USUARIO}: Usuário SSH
 {$SNMP_COMMUNITY}: Comunidade SNMP
 ```
+**Baixar Templates:** Os templates necessários para a configuração devem ser baixados diretamente com Fernando Almondes da Bee Solutions. Você pode obter os templates e suporte através do [Telegram](https://t.me/beesolutions). 
+**Modificação da Regra de Descoberta:**
+   - Após baixar o template, você precisará modificar a regra de descoberta no Zabbix.
+   - No template **Template PPPoE por Vlan Cisco Novo - BEE - Network interfaces discovery pppoe**, altere a chave de descoberta para:
+     - **Tipo:** Monitoramento externo
+     - **Chave:** `discovery_interfaces_pppoe_exe["{HOST.CONN}","{$SNMP_COMMUNITY}"]`
+   - Certifique-se de substituir qualquer ocorrência de `discovery_interfaces_pppoe` por `discovery_interfaces_pppoe_exe` na regra de descoberta.
