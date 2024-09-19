@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Desenvolvido por Bee Solutions
+# Autor: Fernando Almondes
+# Data: 15/06/2023
+
+# Instale o sshpas: apt install sshpass
+# Mova esse script para o diretorio de scripts do Zabbix (/usr/lib/zabbix/externalscripts/)
+# Renomei esse script: de ciscocontador.sh para ciscocontador (mv ciscocontador.sh ciscocontador)
+# Entre na nossa comunidade no Telegram: https://t.me/beesolutions
+
+# Adicione as macros no host:
+
+# {$PORTA} -> PORTA-SSH
+# {$SENHA} -> SENHA-SSH
+# {$USUARIO} -> USUARIO-SSH
+# {$SNMP_COMMUNITY} -> COMMUNITY-SNMP
+
+ip=$1
+usuario=$2
+senha=$3
+interface=$4
+
+parametros='-oKexAlgorithms=+diffie-hellman-group1-sha1,diffie-hellman-group14-sha1'
+cmd="show pppoe summary per subinterface"
+
+total=$(sshpass -p $senha ssh -o LogLevel=quiet -o "StrictHostKeyChecking=no" "$parametros" -p <portassh> $usuario@$ip "$cmd" 2> /dev/null | grep -A1000 'TOTAL' | grep -v 'TOTAL' | grep -w "$interface" | awk '{print $2}')
+
+if [[ ! -z $total ]]; then
+        echo $total
+else
+        total=0
+        echo $total
+fi

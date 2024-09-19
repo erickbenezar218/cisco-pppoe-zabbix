@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ip=$1
+community=$2
+
+python3  /usr/lib/zabbix/externalscripts/discovery_interfaces_pppoe $ip $community
