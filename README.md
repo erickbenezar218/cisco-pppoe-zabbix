@@ -1,98 +1,71 @@
-# cisco-pppoe-zabbix
-Projeto de Monitoramento de Interfaces PPPoE
-Este repositório contém scripts para a descoberta e monitoramento de interfaces PPPoE em dispositivos Cisco. Os scripts são destinados a serem usados com o Zabbix para facilitar o gerenciamento e a monitoração de interfaces PPPoE em tempo real.
+<h1>Integração Cisco PPPoE com Zabbix</h1>
 
-Créditos
-O projeto foi desenvolvido por Fernando Almondes da Bee Solutions. As modificações e ajustes realizados foram feitos para resolver problemas específicos relacionados às MIBs e melhorar a funcionalidade dos scripts.
+<p align="center">
+  <img src="https://img.shields.io/static/v1?label=Python&message=3.8&color=blue&style=for-the-badge&logo=python"/>
+  <img src="https://img.shields.io/static/v1?label=Linux&message=Server&color=blue&style=for-the-badge&logo=linux"/>
+</p>
 
-Arquivos
-ciscocontador: Script para contar o número de interfaces PPPoE em uma subinterface específica do dispositivo Cisco.
-discovery_interfaces_pppoe: Script para descobrir interfaces PPPoE no dispositivo Cisco.
-discovery_interfaces_pppoe_exe: Script executável que chama o script de descoberta com parâmetros.
-Funcionalidade dos Scripts
-ciscocontador
-Este script conecta-se via SSH a um dispositivo Cisco para contar a quantidade de interfaces PPPoE em uma subinterface específica.
+> Status do Projeto: :heavy_check_mark: Concluído
 
-Uso:
+### Tópicos 
 
-bash
-Copiar código
-./ciscocontador <IP> <USUARIO> <SENHA> <SUBINTERFACE>
-Parâmetros:
+:small_blue_diamond: [Descrição](#descrição)
 
-IP: Endereço IP do dispositivo Cisco.
-USUARIO: Nome de usuário para autenticação SSH.
-SENHA: Senha para autenticação SSH.
-SUBINTERFACE: Nome da subinterface para a qual você deseja contar as interfaces PPPoE.
-Comando Executado:
+:small_blue_diamond: [Funcionalidades](#funcionalidades)
 
-bash
-Copiar código
-show pppoe summary per subinterface
-Saída:
+:small_blue_diamond: [Deploy da Aplicação](#deploy-da-aplicação-dash)
 
-O número de interfaces PPPoE encontradas na subinterface especificada. Retorna 0 se nenhuma interface for encontrada.
-discovery_interfaces_pppoe
-Script utilizado para descobrir todas as interfaces PPPoE disponíveis em um dispositivo Cisco e formatar os dados para o Zabbix.
+:small_blue_diamond: [Como Rodar o monitoramento](#como-rodar-o-monitoramento-arrow_forward)
 
-discovery_interfaces_pppoe_exe
-Script executável que chama o discovery_interfaces_pppoe com os parâmetros apropriados para executar a descoberta das interfaces PPPoE.
+## Descrição 
 
-Modificações Realizadas
-Arquivo Modificado: discovery_interfaces_pppoe
+<p align="justify">
+  Este repositório contém scripts para integração do Zabbix com dispositivos Cisco para monitoramento de interfaces PPPoE. Os scripts são projetados para:
 
-Modificações:
+- **Descobrir** interfaces PPPoE nos dispositivos Cisco.
+- **Contar** o número de conexões PPPoE em cada interface.
+</p>
 
-Ajustes na leitura e processamento das MIBs para evitar a leitura de informações desnecessárias e garantir que apenas interfaces relevantes sejam listadas.
-Objetivo das Modificações:
+## Funcionalidades
 
-Corrigir problemas relacionados à leitura de MIBs que não existem e garantir que o script funcione corretamente com o Zabbix.
-Passo a Passo para Instalação
-Clonar o Repositório:
+:heavy_check_mark: Descoberta de interfaces PPPoE
 
-bash
-Copiar código
-git clone <URL_DO_REPOSITORIO>
-cd <DIRETORIO_DO_REPOSITORIO>
-Instalar Dependências:
+:heavy_check_mark: Contagem de conexões PPPoE por interface
 
-Certifique-se de que o sshpass está instalado. Em sistemas baseados em Debian, execute:
+:heavy_check_mark: Compatível com Zabbix e dispositivos Cisco
 
-bash
-Copiar código
-sudo apt update
-sudo apt install sshpass
-Mover Scripts para o Diretório do Zabbix:
+## Deploy da Aplicação :dash:
 
-bash
-Copiar código
-sudo mv ciscocontador /usr/lib/zabbix/externalscripts/
-sudo mv discovery_interfaces_pppoe /usr/lib/zabbix/externalscripts/
-sudo mv discovery_interfaces_pppoe_exe /usr/lib/zabbix/externalscripts/
-Configurar Permissões dos Scripts:
+Não há um deploy web para esta aplicação. Os scripts são utilizados diretamente em ambientes de monitoramento com Zabbix.
 
-bash
-Copiar código
-sudo chmod +x /usr/lib/zabbix/externalscripts/ciscocontador
-sudo chmod +x /usr/lib/zabbix/externalscripts/discovery_interfaces_pppoe
-sudo chmod +x /usr/lib/zabbix/externalscripts/discovery_interfaces_pppoe_exe
-Adicionar Macros no Host Zabbix:
+**Modificações realizadas:**
 
-No Zabbix, adicione as seguintes macros no host onde os scripts serão utilizados:
+1. **Ajuste no script `discovery_interfaces_pppoe`:** Corrigidos problemas relacionados a MIBs e adição de lógica para garantir a descoberta correta das interfaces PPPoE.
+ 
+scripts originais foram desenvolvidos por Fernando Almondes da Bee Solutions. Para mais informações e suporte, você pode entrar em contato com ele através do [Telegram](https://t.me/beesolutions).
+## Como Rodar o monitoramento :arrow_forward:
 
+No terminal, clone o projeto:
+
+```bash
+git clone https://github.com/erickbenezar218/cisco-pppoe-zabbix.git
+```
+Mova os scripts para o diretório de scripts do Zabbix:
+```bash
+mv discovery_interfaces_pppoe /usr/lib/zabbix/externalscripts/
+mv ciscocontador /usr/lib/zabbix/externalscripts/
+mv discovery_interfaces_pppoe_exe /usr/lib/zabbix/externalscripts/
+```
+Dê permissão de execução para os scripts:
+```bash
+chmod +x /usr/lib/zabbix/externalscripts/discovery_interfaces_pppoe
+chmod +x /usr/lib/zabbix/externalscripts/ciscocontador
+chmod +x /usr/lib/zabbix/externalscripts/discovery_interfaces_pppoe_exe
+```
+Configure as macros no Zabbix:
+```bash
 {$PORTA}: Porta SSH
 {$SENHA}: Senha SSH
 {$USUARIO}: Usuário SSH
 {$SNMP_COMMUNITY}: Comunidade SNMP
-Executar o Script de Descoberta:
-
-Execute o script discovery_interfaces_pppoe_exe com os parâmetros apropriados:
-
-bash
-Copiar código
-./discovery_interfaces_pppoe_exe <IP> <COMMUNITY>
-Verificar a Saída:
-
-O script imprimirá um JSON com as interfaces descobertas. Verifique a saída para garantir que os dados estejam corretos e que o Zabbix esteja recebendo as informações corretamente.
-
-Para mais informações e suporte, entre em contato com Fernando Almondes.
+```
